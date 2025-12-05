@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MommyGlow • Pregnancy Care</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --pink: #ffb3c6; --gold: #ffd7a8; --glow: #ff8cb9; --green: #4ade80;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff1f8 0%, #f8e8ff 50%, #e8f5ff 100%);
+            min-height: 100vh; overflow-x:hidden; position:relative; color:#444;
+        }
+
+        /* Animated Waves */
+        .waves { position:fixed; bottom:0; left:0; width:100%; height:40vh; z-index:-1; pointer-events:none; }
+        .wave { position:absolute; bottom:0; width:200%; height:200px; background-repeat:repeat-x; animation:wave 12s linear infinite; }
+        .wave:nth-child(2) { bottom:20px; opacity:0.6; animation:wave 18s linear infinite reverse; }
+        @keyframes wave { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+        header {
+            padding:20px 40px; display:flex; justify-content:space-between; align-items:center;
+            backdrop-filter:blur(10px); background:rgba(255,255,255,0.2);
+            border-bottom:1px solid rgba(255,179,198,0.3); position:sticky; top:0; z-index:1000;
+        }
+        .logo {
+            font-family:'Playfair Display',serif; font-size:32px;
+            background:linear-gradient(45deg,#ff8cb9,#ffd7a8,#c689ff);
+            -webkit-background-clip:text; color:transparent;
+            animation:heartbeat 2s ease-in-out infinite;
+            text-shadow:0 0 30px rgba(255,140,185,0.5);
+        }
+        @keyframes heartbeat { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+
+        .top-right { display:flex; gap:15px; align-items:center; }
+        .top-right span, .top-right a {
+            background:rgba(255,255,255,0.25); backdrop-filter:blur(10px);
+            padding:10px 18px; border-radius:30px; color:#cc6699; font-weight:500;
+            text-decoration:none; border:1px solid rgba(255,182,193,0.4);
+        }
+        .bill-btn {
+            background:linear-gradient(45deg,#ffd93d,#ff8cb9); color:white;
+            border:none; padding:12px 24px; border-radius:30px; font-weight:bold;
+            cursor:pointer; box-shadow:0 10px 30px rgba(255,215,168,0.5);
+        }
+        .cart-icon {
+            position:relative; font-size:28px; cursor:pointer; padding:12px;
+            background:rgba(255,255,255,0.3); border-radius:50%; backdrop-filter:blur(10px);
+            border:1px solid rgba(255,255,255,0.4); box-shadow:0 8px 32px rgba(0,0,0,0.1);
+        }
+        .cart-badge {
+            position:absolute; top:-8px; right:-8px;
+            background:linear-gradient(45deg,#ff6b9d,#ffd93d); color:white;
+            width:26px; height:26px; border-radius:50%; font-size:12px; font-weight:bold;
+            display:flex; align-items:center; justify-content:center;
+            animation:pulse 2s infinite;
+        }
+        @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(255,107,157,0.7)} 70%{box-shadow:0 0 0 10px rgba(255,107,157,0)} 100%{box-shadow:0 0 0 0 rgba(255,107,157,0)} }
+
+        main { max-width:1300px; margin:40px auto; padding:0 20px; }
+        h1 {
+            text-align:center; font-family:'Playfair Display',serif; font-size:48px; margin:40px 0;
+            background:linear-gradient(45deg,#ff8cb9,#ffd7a8,#c689ff,#8cb8ff);
+            -webkit-background-clip:text; color:transparent;
+            animation:glow 4s ease-in-out infinite alternate;
+        }
+        @keyframes glow { from{text-shadow:0 0 20px #ff8cb9} to{text-shadow:0 0 40px #ffd7a8,0 0 60px #c689ff} }
+
+        .products-grid {
+            display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+            gap:28px; margin-top:40px;
+        }
+        .product-card {
+            background:rgba(255,255,255,0.25); backdrop-filter:blur(16px);
+            border-radius:24px; border:1px solid rgba(255,255,255,0.4);
+            overflow:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.1);
+            transition:all 0.4s;
+        }
+        .product-card:hover { transform:translateY(-20px) scale(1.03); box-shadow:0 30px 60px rgba(255,140,185,0.4); }
+        .product-card img { width:100%; height:220px; object-fit:cover; }
+        .card-content { padding:24px; }
+        .price { font-size:24px; font-weight:bold; color:#ff6b9d; margin:10px 0; }
+
+        .add-btn {
+            position:relative; width:100%; padding:16px; border:none; border-radius:50px;
+            font-weight:600; cursor:pointer; overflow:hidden; font-size:15px;
+            background:linear-gradient(45deg,#ff8cb9,#ffd7a8); color:white;
+            box-shadow:0 10px 30px rgba(255,140,185,0.4); transition:all 0.4s;
+        }
+        .add-btn:hover { transform:translateY(-3px); box-shadow:0 15px 35px rgba(255,140,185,0.6); }
+        .add-btn.added {
+            background:linear-gradient(45deg,#4ade80,#22c55e);
+            animation:popIn 0.6s ease-out;
+        }
+        .add-btn.added::after {
+            content:"Added! Select one";
+            position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+            color:white; font-weight:bold; font-size:16px;
+        }
+        @keyframes popIn { 0%{transform:scale(0.8);opacity:0} 60%{transform:scale(1.1)} 100%{transform:scale(1)} }
+
+        /* Floating Cart */
+        .floating-cart {
+            position:fixed; top:100px; right:20px; width:380px;
+            background:rgba(255,255,255,0.3); backdrop-filter:blur(20px);
+            border-radius:24px; border:1px solid rgba(255,255,255,0.5);
+            box-shadow:0 20px 50px rgba(0,0,0,0.15); z-index:1000; padding:20px;
+            display:none; max-height:80vh; overflow-y:auto;
+        }
+        .floating-cart.show { display:block; animation:slideIn 0.5s; }
+        @keyframes slideIn { from{transform:translateX(100%)} to{transform:translateX(0)} }
+
+        /* BILL Modal */
+        #billModal {
+            display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.6); backdrop-filter:blur(12px); z-index:2000;
+            justify-content:center; align-items:center;
+        }
+        .bill-container {
+            background:rgba(255,255,255,0.3); backdrop-filter:blur(20px);
+            border-radius:28px; width:90%; max-width:680px; padding:30px;
+            border:2px solid rgba(255,182,193,0.5); box-shadow:0 20px 60px rgba(255,140,185,0.4);
+        }
+        .bill-header {
+            display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;
+            padding-bottom:15px; border-bottom:3px solid var(--pink);
+        }
+        .bill-header h2 {
+            font-size:42px; font-family:'Playfair Display',serif;
+            background:linear-gradient(45deg,#ff8cb9,#ffd7a8); -webkit-background-clip:text; color:transparent;
+        }
+        .close-bill {
+            background:#cc0000; color:white; border:none; padding:10px 20px; border-radius:50px;
+            cursor:pointer; font-weight:bold; box-shadow:0 8px 20px rgba(204,0,0,0.3);
+        }
+        .bill-table {
+            width:100%; border-collapse:collapse; margin:20px 0; background:rgba(255,255,255,0.4); border-radius:16px; overflow:hidden;
+        }
+        .bill-table th {
+            background:linear-gradient(45deg,#ff8cb9,#ffd7a8); color:white; padding:16px; text-align:center; font-weight:600;
+        }
+        .bill-table td {
+            padding:16px; text-align:center; border-bottom:1px solid rgba(255,182,193,0.3);
+            background:rgba(255,255,255,0.2);
+        }
+        .grand-total {
+            text-align:right; padding:20px; background:rgba(255,240,240,0.6);
+            border-radius:16px; font-size:28px; color:#cc6699; font-weight:bold;
+            margin-top:20px; border:2px dashed var(--pink);
+        }
+        .bill-actions {
+            display:flex; justify-content:center; gap:25px; margin-top:30px;
+        }
+        .bill-actions button {
+            padding:14px 34px; border:none; border-radius:50px; font-weight:bold;
+            cursor:pointer; font-size:16px; box-shadow:0 10px 30px rgba(0,0,0,0.2);
+        }
+        .print-btn { background:#4ade80; color:white; }
+        .continue-btn { background:linear-gradient(45deg,#ffd93d,#ff8cb9); color:white; }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0); opacity: 1; }
+            100% { transform: translateY(-500px) scale(2); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="waves">
+    <div class="wave" style="background:url('data:image/svg+xml;utf8,<svg viewBox=\"0 0 1200 120\" preserveAspectRatio=\"none\"><path d=\"M0,60 C300,20 900,100 1200,60 L1200,120 L0,120 Z\" fill=\"%23ffb3c680\"/></svg>') repeat-x"></div>
+    <div class="wave" style="background:url('data:image/svg+xml;utf8,<svg viewBox=\"0 0 1200 120\" preserveAspectRatio=\"none\"><path d=\"M0,80 C400,30 800,110 1200,70 L1200,120 L0,120 Z\" fill=\"%23ffd7a899\"/></svg>') repeat-x"></div>
+</div>
+
+<header>
+    <div class="logo">MommyGlow</div>
+    <div class="top-right">
+        <span>Welcome, Beautiful Mom-to-be!</span>
+        <a href="/precautions">Precautions</a>
+        <a href="/logout">Logout</a>
+        <button class="bill-btn" id="billBtn">View Bill</button>
+        <div class="cart-icon" id="cartIcon">Cart<span class="cart-badge" id="cartBadge">0</span></div>
+    </div>
+</header>
+
+<main>
+    <h1>Pregnancy Care Treasures</h1>
+    <div class="products-grid">
+        <!-- 1 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?prenatal" alt="Prenatal">
+            <div class="card-content">
+                <h3>Prenatal Multivitamin Capsules</h3>
+                <p>All-in-one prenatal vitamin with folic acid, iron, B12 and DHA for early fetal development.</p>
+                <div class="price">₹699</div>
+                <button class="add-btn" data-name="Prenatal Multivitamin Capsules" data-price="699">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 2 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?folic" alt="Folic">
+            <div class="card-content">
+                <h3>Folic Acid 5mg Tablets</h3>
+                <p>High-strength folic acid to reduce neural tube defect risk in early pregnancy.</p>
+                <div class="price">₹249</div>
+                <button class="add-btn" data-name="Folic Acid 5mg Tablets" data-price="249">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 3 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?dha" alt="DHA">
+            <div class="card-content">
+                <h3>DHA Omega-3 Softgels</h3>
+                <p>Supports baby's brain and eye development; third-trimester recommended dosage.</p>
+                <div class="price">₹549</div>
+                <button class="add-btn" data-name="DHA Omega-3 Softgels" data-price="549">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 4 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?iron" alt="Iron">
+            <div class="card-content">
+                <h3>Iron + Folic Acid Combo</h3>
+                <p>Gentle iron formulation with folate to prevent pregnancy anemia and fatigue.</p>
+                <div class="price">₹369</div>
+                <button class="add-btn" data-name="Iron + Folic Acid Combo" data-price="369">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 5 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?calcium" alt="Calcium">
+            <div class="card-content">
+                <h3>Calcium + Vitamin D3 Tablets</h3>
+                <p>Bone health support for mother and fetal skeletal development.</p>
+                <div class="price">₹329</div>
+                <button class="add-btn" data-name="Calcium + Vitamin D3 Tablets" data-price="329">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 6 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?magnesium" alt="Magnesium">
+            <div class="card-content">
+                <h3>Magnesium Citrate Capsules</h3>
+                <p>Helps reduce leg cramps and supports muscle function during pregnancy.</p>
+                <div class="price">₹399</div>
+                <button class="add-btn" data-name="Magnesium Citrate Capsules" data-price="399">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 7 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?test" alt="Test">
+            <div class="card-content">
+                <h3>Pregnancy Test Kit (Ultra Sensitivity)</h3>
+                <p>Early detection pregnancy kit with fast, accurate results (Pack of 2).</p>
+                <div class="price">₹199</div>
+                <button class="add-btn" data-name="Pregnancy Test Kit (Ultra Sensitivity)" data-price="199">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 8 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?pillow" alt="Pillow">
+            <div class="card-content">
+                <h3>Maternity Pillow - U Shape</h3>
+                <p>Full-body U-shaped pillow for belly, back and leg support for comfortable sleep.</p>
+                <div class="price">₹1,499</div>
+                <button class="add-btn" data-name="Maternity Pillow - U Shape" data-price="1499">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 9 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?support" alt="Support">
+            <div class="card-content">
+                <h3>Adjustable Maternity Support Belt</h3>
+                <p>Lower-back and abdominal support to relieve pressure and pain as belly grows.</p>
+                <div class="price">₹899</div>
+                <button class="add-btn" data-name="Adjustable Maternity Support Belt" data-price="899">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 10 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?socks" alt="Socks">
+            <div class="card-content">
+                <h3>Compression Maternity Socks</h3>
+                <p>Graduated compression socks to minimize swelling and improve circulation.</p>
+                <div class="price">₹399</div>
+                <button class="add-btn" data-name="Compression Maternity Socks" data-price="399">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 11 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?cream" alt="Cream">
+            <div class="card-content">
+                <h3>Anti-Stretch Mark Cream</h3>
+                <p>Hydrating cream with peptides &amp; vitamin E to prevent and reduce stretch marks.</p>
+                <div class="price">₹499</div>
+                <button class="add-btn" data-name="Anti-Stretch Mark Cream" data-price="499">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 12 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?oil" alt="Oil">
+            <div class="card-content">
+                <h3>Natural Stretch Mark Oil</h3>
+                <p>Cold-pressed oils that nourish and enhance skin elasticity during pregnancy.</p>
+                <div class="price">₹599</div>
+                <button class="add-btn" data-name="Natural Stretch Mark Oil" data-price="599">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 13 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?wash" alt="Wash">
+            <div class="card-content">
+                <h3>Gentle Pregnancy-Safe Body Wash</h3>
+                <p>Sulfate-free body wash formulated for sensitive, hormone-affected skin.</p>
+                <div class="price">₹349</div>
+                <button class="add-btn" data-name="Gentle Pregnancy-Safe Body Wash" data-price="349">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 14 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?moisturizer" alt="Moisturizer">
+            <div class="card-content">
+                <h3>Fragrance-Free Moisturizer</h3>
+                <p>Non-irritating daily face/body moisturizer safe for pregnancy skin.</p>
+                <div class="price">₹299</div>
+                <button class="add-btn" data-name="Fragrance-Free Moisturizer" data-price="299">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 15 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?gel" alt="Gel">
+            <div class="card-content">
+                <h3>Cooling Foot Relief Gel</h3>
+                <p>Soothes swollen, tired feet with menthol-free calming ingredients.</p>
+                <div class="price">₹259</div>
+                <button class="add-btn" data-name="Cooling Foot Relief Gel" data-price="259">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 16 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?relief" alt="Relief">
+            <div class="card-content">
+                <h3>Hemorrhoid Relief Ointment</h3>
+                <p>Topical soothing gel to reduce pain and itching associated with pregnancy hemorrhoids.</p>
+                <div class="price">₹399</div>
+                <button class="add-btn" data-name="Hemorrhoid Relief Ointment" data-price="399">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 17 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?bands" alt="Bands">
+            <div class="card-content">
+                <h3>Morning Sickness Acupressure Bands</h3>
+                <p>Wristbands applying gentle pressure to reduce nausea and vomiting.</p>
+                <div class="price">₹299</div>
+                <button class="add-btn" data-name="Morning Sickness Acupressure Bands" data-price="299">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 18 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?ginger" alt="Ginger">
+            <div class="card-content">
+                <h3>Ginger Chews (Nausea Relief)</h3>
+                <p>Natural ginger candy for fast relief from pregnancy-related nausea.</p>
+                <div class="price">₹199</div>
+                <button class="add-btn" data-name="Ginger Chews (Nausea Relief)" data-price="199">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 19 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?mat" alt="Mat">
+            <div class="card-content">
+                <h3>Prenatal Yoga Mat (Extra Thick)</h3>
+                <p>Non-slip, cushioned mat for prenatal exercises and pelvic floor strengthening.</p>
+                <div class="price">₹1,249</div>
+                <button class="add-btn" data-name="Prenatal Yoga Mat (Extra Thick)" data-price="1249">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 20 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?wedge" alt="Wedge">
+            <div class="card-content">
+                <h3>Pregnancy Support Pillow - Wedge</h3>
+                <p>Compact wedge pillow to support belly or back while sitting or sleeping.</p>
+                <div class="price">₹699</div>
+                <button class="add-btn" data-name="Pregnancy Support Pillow - Wedge" data-price="699">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 21 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?jeans" alt="Jeans">
+            <div class="card-content">
+                <h3>Maternity Denim Overbump Jeans</h3>
+                <p>Comfortable expandable denim with soft over-bump panel for growing belly.</p>
+                <div class="price">₹1,299</div>
+                <button class="add-btn" data-name="Maternity Denim Overbump Jeans" data-price="1299">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 22 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?leggings" alt="Leggings">
+            <div class="card-content">
+                <h3>Soft Maternity Leggings</h3>
+                <p>High-waist stretch leggings for everyday comfort and movement.</p>
+                <div class="price">₹799</div>
+                <button class="add-btn" data-name="Soft Maternity Leggings" data-price="799">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 23 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?bra" alt="Bra">
+            <div class="card-content">
+                <h3>Nursing &amp; Maternity Bras Pack (2)</h3>
+                <p>Seamless, supportive bras suitable for late pregnancy and breastfeeding.</p>
+                <div class="price">₹899</div>
+                <button class="add-btn" data-name="Nursing & Maternity Bras Pack (2)" data-price="899">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 24 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?pads" alt="Pads">
+            <div class="card-content">
+                <h3>Disposable Nursing Breast Pads</h3>
+                <p>Super-absorbent pads to prevent leak-through and keep clothes dry post-delivery.</p>
+                <div class="price">₹279</div>
+                <button class="add-btn" data-name="Disposable Nursing Breast Pads" data-price="279">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 25 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?shields" alt="Shields">
+            <div class="card-content">
+                <h3>Silicone Nipple Shields (Pair)</h3>
+                <p>Helps with latch issues and sore nipples while breastfeeding.</p>
+                <div class="price">₹399</div>
+                <button class="add-btn" data-name="Silicone Nipple Shields (Pair)" data-price="399">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 26 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?powder" alt="Powder">
+            <div class="card-content">
+                <h3>Lactation Support Herbal Powder</h3>
+                <p>Galactagogues blend (fenugreek, fennel) to support milk supply after delivery.</p>
+                <div class="price">₹549</div>
+                <button class="add-btn" data-name="Lactation Support Herbal Powder" data-price="549">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 27 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?cpillow" alt="CPillow">
+            <div class="card-content">
+                <h3>Breastfeeding Pillow (C-shape)</h3>
+                <p>Supports comfortable feeding positions for mother and baby.</p>
+                <div class="price">₹1,099</div>
+                <button class="add-btn" data-name="Breastfeeding Pillow (C-shape)" data-price="1099">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 28 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?epump" alt="EPump">
+            <div class="card-content">
+                <h3>Electric Breast Pump (Double)</h3>
+                <p>Efficient double pump with adjustable suction for expressing milk.</p>
+                <div class="price">₹6,499</div>
+                <button class="add-btn" data-name="Electric Breast Pump (Double)" data-price="6499">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 29 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?mpump" alt="MPump">
+            <div class="card-content">
+                <h3>Manual Breast Pump</h3>
+                <p>Compact manual pump for occasional expressing on-the-go.</p>
+                <div class="price">₹1,199</div>
+                <button class="add-btn" data-name="Manual Breast Pump" data-price="1199">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 30 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?bags" alt="Bags">
+            <div class="card-content">
+                <h3>Breast Milk Storage Bags (Pack of 50)</h3>
+                <p>Pre-sterilized, leak-proof storage bags for expressed milk.</p>
+                <div class="price">₹799</div>
+                <button class="add-btn" data-name="Breast Milk Storage Bags (Pack of 50)" data-price="799">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 31 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?bpm" alt="BPM">
+            <div class="card-content">
+                <h3>Digital Blood Pressure Monitor</h3>
+                <p>Home BP monitor with pregnancy-safe cuff to track hypertension risk.</p>
+                <div class="price">₹1,899</div>
+                <button class="add-btn" data-name="Digital Blood Pressure Monitor" data-price="1899">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 32 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?doppler" alt="Doppler">
+            <div class="card-content">
+                <h3>Fetal Doppler (Handheld)</h3>
+                <p>Portable device to listen to baby's heartbeat from second trimester onwards.</p>
+                <div class="price">₹2,499</div>
+                <button class="add-btn" data-name="Fetal Doppler (Handheld)" data-price="2499">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 33 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?journal" alt="Journal">
+            <div class="card-content">
+                <h3>Kick Count Tracker Journal</h3>
+                <p>Simple journal to record daily baby movements and maternal notes.</p>
+                <div class="price">₹349</div>
+                <button class="add-btn" data-name="Kick Count Tracker Journal" data-price="349">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 34 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?therm" alt="Therm">
+            <div class="card-content">
+                <h3>Thermometer - Digital</h3>
+                <p>Quick-read, accurate digital thermometer suitable for mother and baby use.</p>
+                <div class="price">₹299</div>
+                <button class="add-btn" data-name="Thermometer - Digital" data-price="299">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 35 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?sun" alt="Sun">
+            <div class="card-content">
+                <h3>Pregnancy-Safe Sunscreen SPF50</h3>
+                <p>Mineral sunscreen (zinc oxide) safe for sensitive skin during pregnancy.</p>
+                <div class="price">₹599</div>
+                <button class="add-btn" data-name="Pregnancy-Safe Sunscreen SPF50" data-price="599">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 36 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?hair" alt="Hair">
+            <div class="card-content">
+                <h3>Scalp &amp; Hair Strengthening Serum</h3>
+                <p>Postpartum hair fall support with gentle, pregnancy-safe ingredients.</p>
+                <div class="price">₹399</div>
+                <button class="add-btn" data-name="Scalp & Hair Strengthening Serum" data-price="399">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 37 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?chew" alt="Chew">
+            <div class="card-content">
+                <h3>Iron-Rich Food Supplement (Chewable)</h3>
+                <p>Palatable chewable iron tablets for those who have trouble swallowing pills.</p>
+                <div class="price">₹329</div>
+                <button class="add-btn" data-name="Iron-Rich Food Supplement (Chewable)" data-price="329">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 38 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?prot" alt="Prot">
+            <div class="card-content">
+                <h3>Protein Powder - Pregnancy Blend</h3>
+                <p>Plant-based protein powder formulated for pregnancy nutritional needs.</p>
+                <div class="price">₹999</div>
+                <button class="add-btn" data-name="Protein Powder - Pregnancy Blend" data-price="999">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 39 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?snack" alt="Snack">
+            <div class="card-content">
+                <h3>High-Fiber Snack Bars (Constipation Relief)</h3>
+                <p>Fiber-rich, pregnancy-safe snacks to help maintain regularity.</p>
+                <div class="price">₹249</div>
+                <button class="add-btn" data-name="High-Fiber Snack Bars (Constipation Relief)" data-price="249">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 40 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?spray" alt="Spray">
+            <div class="card-content">
+                <h3>Perineal Care Spray</h3>
+                <p>Soothing antiseptic spray for perineal comfort during late pregnancy and postpartum.</p>
+                <div class="price">₹299</div>
+                <button class="add-btn" data-name="Perineal Care Spray" data-price="299">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 41 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?night" alt="Night">
+            <div class="card-content">
+                <h3>Maternity Nightwear Set</h3>
+                <p>Soft, breathable nightwear designed for comfort and easy nursing access.</p>
+                <div class="price">₹999</div>
+                <button class="add-btn" data-name="Maternity Nightwear Set" data-price="999">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 42 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?memory" alt="Memory">
+            <div class="card-content">
+                <h3>Pregnancy Journal &amp; Memory Book</h3>
+                <p>Guided prompts and space for ultrasound photos, appointments and thoughts.</p>
+                <div class="price">₹449</div>
+                <button class="add-btn" data-name="Pregnancy Journal & Memory Book" data-price="449">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 43 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?paste" alt="Paste">
+            <div class="card-content">
+                <h3>Pregnancy-safe Toothpaste</h3>
+                <p>Non-fluoride option with gentle cleaning, safe for sensitive gums during pregnancy.</p>
+                <div class="price">₹179</div>
+                <button class="add-btn" data-name="Pregnancy-safe Toothpaste" data-price="179">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 44 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?electro" alt="Electro">
+            <div class="card-content">
+                <h3>Oral Rehydration Electrolyte Drink (Pregnancy)</h3>
+                <p>Electrolyte formulation to restore fluids during nausea or vomiting episodes.</p>
+                <div class="price">₹149</div>
+                <button class="add-btn" data-name="Oral Rehydration Electrolyte Drink (Pregnancy)" data-price="149">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 45 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?swim" alt="Swim">
+            <div class="card-content">
+                <h3>Maternity Swimwear</h3>
+                <p>Supportive, chlorine-resistant swimwear suitable for prenatal water exercise.</p>
+                <div class="price">₹1,099</div>
+                <button class="add-btn" data-name="Maternity Swimwear" data-price="1099">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 46 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?repel" alt="Repel">
+            <div class="card-content">
+                <h3>Pregnancy-Safe Insect Repellent</h3>
+                <p>DEET-free mosquito repellent formulation safe for expecting mothers.</p>
+                <div class="price">₹299</div>
+                <button class="add-btn" data-name="Pregnancy-Safe Insect Repellent" data-price="299">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 47 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?comp" alt="Comp">
+            <div class="card-content">
+                <h3>Medical Compression Leggings</h3>
+                <p>Strong compression leggings for varicose veins prevention and support.</p>
+                <div class="price">₹1,199</div>
+                <button class="add-btn" data-name="Medical Compression Leggings" data-price="1199">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 48 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?robe" alt="Robe">
+            <div class="card-content">
+                <h3>Maternity Robe with Wrap</h3>
+                <p>Soft robe ideal for hospital stays and postnatal comfort.</p>
+                <div class="price">₹899</div>
+                <button class="add-btn" data-name="Maternity Robe with Wrap" data-price="899">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 49 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?lip" alt="Lip">
+            <div class="card-content">
+                <h3>Hydrating Lip Balm - Pregnancy Safe</h3>
+                <p>Non-irritating lip care for dry lips caused by hormonal changes.</p>
+                <div class="price">₹149</div>
+                <button class="add-btn" data-name="Hydrating Lip Balm - Pregnancy Safe" data-price="149">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 50 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?case" alt="Case">
+            <div class="card-content">
+                <h3>Pregnancy Pillowcase (Removable)</h3>
+                <p>Extra pillowcase designed for maternity pillows, machine-washable cover.</p>
+                <div class="price">₹249</div>
+                <button class="add-btn" data-name="Pregnancy Pillowcase (Removable)" data-price="249">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 51 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?names" alt="Names">
+            <div class="card-content">
+                <h3>Baby Name &amp; Planning Workbook</h3>
+                <p>Creative prompts and checklists for birth planning and naming ideas.</p>
+                <div class="price">₹199</div>
+                <button class="add-btn" data-name="Baby Name & Planning Workbook" data-price="199">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 52 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?meditation" alt="Meditation">
+            <div class="card-content">
+                <h3>Pregnancy Meditation &amp; Relaxation CD/Download</h3>
+                <p>Guided meditations for stress relief, sleep, and prenatal bonding.</p>
+                <div class="price">₹299</div>
+                <button class="add-btn" data-name="Pregnancy Meditation & Relaxation CD/Download" data-price="299">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 53 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?pillow" alt="Pillow Partner">
+            <div class="card-content">
+                <h3>Pillow for Nursing Partner</h3>
+                <p>Small support pillow for partner comfort during labor or feeding sessions.</p>
+                <div class="price">₹399</div>
+                <button class="add-btn" data-name="Pillow for Nursing Partner" data-price="399">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 54 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?essential-oil" alt="Essential Oil">
+            <div class="card-content">
+                <h3>Pregnancy-safe Essential Oil Blend (Aromatic, Non-topical)</h3>
+                <p>Diffuser-friendly blend designed for relaxation (consult doctor before use).</p>
+                <div class="price">₹399</div>
+                <button class="add-btn" data-name="Pregnancy-safe Essential Oil Blend (Aromatic, Non-topical)" data-price="399">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 55 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?scar" alt="Scar Gel">
+            <div class="card-content">
+                <h3>Silicone Scar Reduction Gel</h3>
+                <p>Postpartum scar care for C-section incisions (medical-grade silicone).</p>
+                <div class="price">₹499</div>
+                <button class="add-btn" data-name="Silicone Scar Reduction Gel" data-price="499">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 56 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?belly-band" alt="Belly Band">
+            <div class="card-content">
+                <h3>Maternity Compression Belly Band</h3>
+                <p>Light compression over abdominal area to reduce movement discomfort.</p>
+                <div class="price">₹599</div>
+                <button class="add-btn" data-name="Maternity Compression Belly Band" data-price="599">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 57 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?hand-cream" alt="Hand Cream">
+            <div class="card-content">
+                <h3>Pregnancy-Safe Hand Cream</h3>
+                <p>Non-irritating hand cream for dry, sensitive skin during pregnancy.</p>
+                <div class="price">₹199</div>
+                <button class="add-btn" data-name="Pregnancy-Safe Hand Cream" data-price="199">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 58 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?activewear" alt="Activewear">
+            <div class="card-content">
+                <h3>Maternity Activewear Set</h3>
+                <p>Breathable top and supportive leggings for prenatal workouts.</p>
+                <div class="price">₹1,499</div>
+                <button class="add-btn" data-name="Maternity Activewear Set" data-price="1499">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 59 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?shampoo" alt="Shampoo">
+            <div class="card-content">
+                <h3>Pregnancy-Safe Anti-Dandruff Shampoo</h3>
+                <p>Gentle scalp care safe for use in pregnancy (consult provider if needed).</p>
+                <div class="price">₹279</div>
+                <button class="add-btn" data-name="Pregnancy-Safe Anti-Dandruff Shampoo" data-price="279">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 60 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?water-bottle" alt="Hydration Bottle">
+            <div class="card-content">
+                <h3>Hydration Tracking Water Bottle</h3>
+                <p>Insulated bottle with time markers to remind you to stay hydrated.</p>
+                <div class="price">₹599</div>
+                <button class="add-btn" data-name="Hydration Tracking Water Bottle" data-price="599">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 61 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?balm" alt="Anti-chafing Balm">
+            <div class="card-content">
+                <h3>Pregnancy-safe Anti-chafing Balm</h3>
+                <p>Prevents skin irritation between thighs or under breasts as body changes.</p>
+                <div class="price">₹219</div>
+                <button class="add-btn" data-name="Pregnancy-safe Anti-chafing Balm" data-price="219">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 62 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?underwear" alt="Waterproof Underwear">
+            <div class="card-content">
+                <h3>Waterproof Maternity Underwear (Pack of 3)</h3>
+                <p>Convenient, breathable underwear for heavy days or postpartum use.</p>
+                <div class="price">₹499</div>
+                <button class="add-btn" data-name="Waterproof Maternity Underwear (Pack of 3)" data-price="499">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 63 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?lumbar" alt="Lumbar Cushion">
+            <div class="card-content">
+                <h3>Back Support Lumbar Cushion</h3>
+                <p>Ergonomic cushion for office chairs to support lower back and posture.</p>
+                <div class="price">₹699</div>
+                <button class="add-btn" data-name="Back Support Lumbar Cushion" data-price="699">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 64 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?ointment" alt="Ointment">
+            <div class="card-content">
+                <h3>Pregnancy-safe Multipurpose Ointment</h3>
+                <p>All-rounder ointment for dry skin, cracked nipples (consult provider).</p>
+                <div class="price">₹349</div>
+                <button class="add-btn" data-name="Pregnancy-safe Multipurpose Ointment" data-price="349">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 65 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?icepack" alt="Ice Pack">
+            <div class="card-content">
+                <h3>Reusable Ice Pack for Swelling</h3>
+                <p>Flexible cold pack to reduce localized swelling and relieve pain.</p>
+                <div class="price">₹299</div>
+                <button class="add-btn" data-name="Reusable Ice Pack for Swelling" data-price="299">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 66 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?massage" alt="Perineal Oil">
+            <div class="card-content">
+                <h3>Perineal Massage Oil</h3>
+                <p>Lubricating oil to support perineal stretching and reduce tearing risk.</p>
+                <div class="price">₹449</div>
+                <button class="add-btn" data-name="Perineal Massage Oil" data-price="449">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 67 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?spray" alt="Sleep Spray">
+            <div class="card-content">
+                <h3>Pregnancy-safe Sleep Spray (Pillow Mist)</h3>
+                <p>Mild aromatic mist to aid relaxation and sleep (non-inhalational, consult doctor).</p>
+                <div class="price">₹299</div>
+                <button class="add-btn" data-name="Pregnancy-safe Sleep Spray (Pillow Mist)" data-price="299">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 68 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?resistance-bands" alt="Resistance Bands">
+            <div class="card-content">
+                <h3>Pregnancy Fitness Resistance Bands</h3>
+                <p>Low-impact resistance bands for safe prenatal strength training.</p>
+                <div class="price">₹399</div>
+                <button class="add-btn" data-name="Pregnancy Fitness Resistance Bands" data-price="399">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 69 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?vitamin-c" alt="Vitamin C Serum">
+            <div class="card-content">
+                <h3>Stretch Mark Prevention Vitamin C Serum</h3>
+                <p>Topical antioxidant serum to support collagen and skin repair (use as advised).</p>
+                <div class="price">₹499</div>
+                <button class="add-btn" data-name="Stretch Mark Prevention Vitamin C Serum" data-price="499">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 70 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?deodorant" alt="Deodorant">
+            <div class="card-content">
+                <h3>Pregnancy-Safe Deodorant (Natural)</h3>
+                <p>Aluminum-free, gentle deodorant formulated for sensitive hormonal skin.</p>
+                <div class="price">₹249</div>
+                <button class="add-btn" data-name="Pregnancy-Safe Deodorant (Natural)" data-price="249">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 71 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?organizer" alt="Organizer">
+            <div class="card-content">
+                <h3>Hospital Bag Checklist &amp; Organizer</h3>
+                <p>Durable organizer with labeled compartments for hospital essentials.</p>
+                <div class="price">₹599</div>
+                <button class="add-btn" data-name="Hospital Bag Checklist & Organizer" data-price="599">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 72 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?sling" alt="Belly Sling">
+            <div class="card-content">
+                <h3>Hands-Free Belly Support Sling</h3>
+                <p>Soft sling to carry light loads while reducing pressure on the abdomen.</p>
+                <div class="price">₹699</div>
+                <button class="add-btn" data-name="Hands-Free Belly Support Sling" data-price="699">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 73 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?gummies" alt="Prenatal Gummies">
+            <div class="card-content">
+                <h3>Prenatal Vitamin Gummies (Sugar-Free)</h3>
+                <p>Palatable gummies for those who dislike tablets; doctor-approved ingredients.</p>
+                <div class="price">₹699</div>
+                <button class="add-btn" data-name="Prenatal Vitamin Gummies (Sugar-Free)" data-price="699">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 74 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?binder" alt="Belly Binder">
+            <div class="card-content">
+                <h3>Postpartum Recovery Belly Binder</h3>
+                <p>Postnatal support garment to help abdominal recovery after delivery.</p>
+                <div class="price">₹1,199</div>
+                <button class="add-btn" data-name="Postpartum Recovery Belly Binder" data-price="1199">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 75 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?massager" alt="Massager">
+            <div class="card-content">
+                <h3>Handheld Massager (Low Intensity)</h3>
+                <p>Gentle massager to relieve back and shoulder tension (avoid abdomen).</p>
+                <div class="price">₹1,099</div>
+                <button class="add-btn" data-name="Handheld Massager (Low Intensity)" data-price="1099">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 76 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?drops" alt="Multimineral Drops">
+            <div class="card-content">
+                <h3>Pregnancy-Friendly Multimineral Drops</h3>
+                <p>Liquid multimineral supplement for picky eaters or morning sickness sufferers.</p>
+                <div class="price">₹449</div>
+                <button class="add-btn" data-name="Pregnancy-Friendly Multimineral Drops" data-price="449">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 77 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?sleep-mask" alt="Sleep Mask">
+            <div class="card-content">
+                <h3>Silk Sleep Eye Mask (Breathable)</h3>
+                <p>Comfortable eye mask to improve sleep quality during pregnancy.</p>
+                <div class="price">₹249</div>
+                <button class="add-btn" data-name="Silk Sleep Eye Mask (Breathable)" data-price="249">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 78 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?sleeves" alt="Compression Sleeves">
+            <div class="card-content">
+                <h3>Compression Arm Sleeves (Maternity)</h3>
+                <p>Helps with swelling in arms and hands during late pregnancy.</p>
+                <div class="price">₹349</div>
+                <button class="add-btn" data-name="Compression Arm Sleeves (Maternity)" data-price="349">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 79 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?makeup-remover" alt="Makeup Remover">
+            <div class="card-content">
+                <h3>Pregnancy-safe Makeup Remover</h3>
+                <p>Gentle, oil-based remover that cleanses without harsh chemicals.</p>
+                <div class="price">₹199</div>
+                <button class="add-btn" data-name="Pregnancy-safe Makeup Remover" data-price="199">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 80 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?stroller" alt="Stroller">
+            <div class="card-content">
+                <h3>Lightweight Stroller (Travel-Friendly)</h3>
+                <p>Compact travel stroller suitable for newborns and easy for hospital trips.</p>
+                <div class="price">₹5,999</div>
+                <button class="add-btn" data-name="Lightweight Stroller (Travel-Friendly)" data-price="5999">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 81 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?car-seat" alt="Car Seat Adapter">
+            <div class="card-content">
+                <h3>Car Seat Adapter (Infant)</h3>
+                <p>Adapter to safely secure baby car seat to stroller frames for travel convenience.</p>
+                <div class="price">₹1,299</div>
+                <button class="add-btn" data-name="Car Seat Adapter (Infant)" data-price="1299">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 82 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?cookbook" alt="Cookbook">
+            <div class="card-content">
+                <h3>Pregnancy &amp; Baby Nutrition Cookbook</h3>
+                <p>Recipe collection focused on nutrient-dense meals for pregnancy and breastfeeding.</p>
+                <div class="price">₹499</div>
+                <button class="add-btn" data-name="Pregnancy & Baby Nutrition Cookbook" data-price="499">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 83 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?dates" alt="Organic Dates">
+            <div class="card-content">
+                <h3>Organic Dates (Energy Snack)</h3>
+                <p>Natural, iron-rich dates ideal for energy boosts in pregnancy (small pack).</p>
+                <div class="price">₹299</div>
+                <button class="add-btn" data-name="Organic Dates (Energy Snack)" data-price="299">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 84 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?herbs" alt="Sitz Bath Herbs">
+            <div class="card-content">
+                <h3>Postpartum Sitz Bath Herbs Pack</h3>
+                <p>Herbal sitz bath mix to soothe perineal area after delivery.</p>
+                <div class="price">₹249</div>
+                <button class="add-btn" data-name="Postpartum Sitz Bath Herbs Pack" data-price="249">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 85 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?nursing-cover" alt="Nursing Cover">
+            <div class="card-content">
+                <h3>Breastfeeding Clothes Cover (Nursing Cover)</h3>
+                <p>Lightweight, breathable cover for discreet nursing in public.</p>
+                <div class="price">₹299</div>
+                <button class="add-btn" data-name="Breastfeeding Clothes Cover (Nursing Cover)" data-price="299">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 86 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?white-noise" alt="White Noise">
+            <div class="card-content">
+                <h3>Portable White Noise Machine</h3>
+                <p>Helps mother relax and later soothes newborn sleep patterns.</p>
+                <div class="price">₹1,099</div>
+                <button class="add-btn" data-name="Portable White Noise Machine" data-price="1099">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 87 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?books" alt="Education Bundle">
+            <div class="card-content">
+                <h3>Pregnancy Education Book Bundle</h3>
+                <p>Set of guides: labor, breastfeeding, newborn care — ideal for first-time parents.</p>
+                <div class="price">₹799</div>
+                <button class="add-btn" data-name="Pregnancy Education Book Bundle" data-price="799">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 88 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?spoon" alt="Spoons">
+            <div class="card-content">
+                <h3>Silicone Food-Safe Spoon Set (Postpartum)</h3>
+                <p>Soft spoons ideal for easy feeding and minimal spillage during recovery.</p>
+                <div class="price">₹249</div>
+                <button class="add-btn" data-name="Silicone Food-Safe Spoon Set (Postpartum)" data-price="249">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 89 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?vitamin-b6" alt="Vitamin B6">
+            <div class="card-content">
+                <h3>Vitamin B6 Chewables (Nausea Support)</h3>
+                <p>Doctor-recommended vitamin B6 dose to help manage morning sickness symptoms.</p>
+                <div class="price">₹229</div>
+                <button class="add-btn" data-name="Vitamin B6 Chewables (Nausea Support)" data-price="229">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 90 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?voucher" alt="Voucher">
+            <div class="card-content">
+                <h3>Pregnancy Test Confirmation Service (Voucher)</h3>
+                <p>Voucher for clinical confirmation tests and basic prenatal bloodwork at partner labs.</p>
+                <div class="price">₹1,499</div>
+                <button class="add-btn" data-name="Pregnancy Test Confirmation Service (Voucher)" data-price="1499">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 91 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?foam-roller" alt="Foam Roller">
+            <div class="card-content">
+                <h3>Foam Roller (Gentle)</h3>
+                <p>Soft foam roller for gentle myofascial release and back care (avoid direct abdomen work).</p>
+                <div class="price">₹799</div>
+                <button class="add-btn" data-name="Foam Roller (Gentle)" data-price="799">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 92 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?binder-light" alt="Light Binder">
+            <div class="card-content">
+                <h3>Pregnancy Belly Binder (Lightweight)</h3>
+                <p>Offers comfortable, breathable support for daily activities.</p>
+                <div class="price">₹549</div>
+                <button class="add-btn" data-name="Pregnancy Belly Binder (Lightweight)" data-price="549">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 93 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?tea" alt="Herbal Tea">
+            <div class="card-content">
+                <h3>Anti-Nausea Herbal Tea (Caffeine-Free)</h3>
+                <p>Gentle tea blend with ginger and lemon balm to calm stomach upset.</p>
+                <div class="price">₹249</div>
+                <button class="add-btn" data-name="Anti-Nausea Herbal Tea (Caffeine-Free)" data-price="249">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 94 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?facial-mask" alt="Facial Mask">
+            <div class="card-content">
+                <h3>Pregnancy Glow Facial Mask (Hydrating)</h3>
+                <p>One-time hydrating mask formulated without retinoids or strong actives.</p>
+                <div class="price">₹199</div>
+                <button class="add-btn" data-name="Pregnancy Glow Facial Mask (Hydrating)" data-price="199">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 95 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?heat-wrap" alt="Therapeutic Wrap">
+            <div class="card-content">
+                <h3>Therapeutic Heat Wrap (Back)</h3>
+                <p>Low-level heat wrap to ease back pain — use as recommended by provider.</p>
+                <div class="price">₹699</div>
+                <button class="add-btn" data-name="Therapeutic Heat Wrap (Back)" data-price="699">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 96 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?stool" alt="Folding Stool">
+            <div class="card-content">
+                <h3>Portable Folding Stool (For Shower/Changing)</h3>
+                <p>Lightweight stool useful during pregnancy for safer mobility in the home.</p>
+                <div class="price">₹899</div>
+                <button class="add-btn" data-name="Portable Folding Stool (For Shower/Changing)" data-price="899">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 97 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?facial-oil" alt="Facial Oil">
+            <div class="card-content">
+                <h3>Pregnancy Glow Facial Oil (Non-comedogenic)</h3>
+                <p>Light oil to nourish dry patches without clogging pores; safe topical ingredients.</p>
+                <div class="price">₹449</div>
+                <button class="add-btn" data-name="Pregnancy Glow Facial Oil (Non-comedogenic)" data-price="449">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 98 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?planner" alt="Planner">
+            <div class="card-content">
+                <h3>Pregnancy Planner &amp; Appointment Organizer (Printable)</h3>
+                <p>Downloadable planner PDF with weekly trackers, appointments, and reminders.</p>
+                <div class="price">₹149</div>
+                <button class="add-btn" data-name="Pregnancy Planner & Appointment Organizer (Printable)" data-price="149">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 99 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?vaccine" alt="Vaccine Guide">
+            <div class="card-content">
+                <h3>Vitamin K &amp; Hep B Information Pack (Vaccine Guide)</h3>
+                <p>Educational pamphlet and vaccine schedule guide for newborn immunizations.</p>
+                <div class="price">₹99</div>
+                <button class="add-btn" data-name="Vitamin K & Hep B Information Pack (Vaccine Guide)" data-price="99">Add to Glow Cart</button>
+            </div>
+        </div>
+        <!-- 100 -->
+        <div class="product-card">
+            <img src="https://source.unsplash.com/500x350/?counseling" alt="Support Hotline">
+            <div class="card-content">
+                <h3>New Parent Support Hotline Voucher (Counseling)</h3>
+                <p>Voucher for a session with certified maternal counselors and lactation consultants.</p>
+                <div class="price">₹1,999</div>
+                <button class="add-btn" data-name="New Parent Support Hotline Voucher (Counseling)" data-price="1999">Add to Glow Cart</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Floating Cart -->
+<div class="floating-cart" id="floatingCart">
+    <h3 style="background:linear-gradient(45deg,#ff8cb9,#ffd7a8);-webkit-background-clip:text;color:transparent;">
+        Your Glow Cart
+    </h3>
+    <div id="cartItems" style="margin:20px 0; max-height:50vh; overflow-y:auto;"></div>
+    <div style="border-top:2px dashed #ffd7a8; padding-top:15px; text-align:right; font-size:20px; color:#cc6699;">
+        <strong>Total: <span id="cartTotal">₹0</span></strong>
+    </div>
+</div>
+
+<!-- BILL Modal -->
+<div id="billModal">
+    <div class="bill-container">
+        <div class="bill-header">
+            <h2>BILL</h2>
+            <button class="close-bill" onclick="closeBill()">Close</button>
+        </div>
+        <table class="bill-table">
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody id="billItems"></tbody>
+        </table>
+        <div class="grand-total">
+            Grand Total: <span id="grandTotal">₹0</span>
+        </div>
+        <div class="bill-actions">
+            <button class="print-btn" onclick="window.print()">Print Bill</button>
+            <button class="continue-btn" onclick="closeBill()">Continue Shopping</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let cart = JSON.parse(localStorage.getItem('mommyGlowCart') || '[]');
+
+    function saveCart() {
+        localStorage.setItem('mommyGlowCart', JSON.stringify(cart));
+        updateAll();
+    }
+
+    function addToCart(btn, name, price) {
+        const item = cart.find(i => i.name === name);
+        if (item) item.qty += 1;
+        else cart.push({ name, price: Number(price), qty: 1 });
+        saveCart();
+
+        btn.classList.add('added');
+        btn.innerHTML = 'Added! Select one';
+        setTimeout(() => {
+            btn.classList.remove('added');
+            btn.innerHTML = 'Add to Glow Cart';
+        }, 2000);
+
+        sparkleBurst();
+    }
+
+    function sparkleBurst() {
+        for(let i = 0; i < 12; i++) {
+            setTimeout(() => {
+                const s = document.createElement('div');
+                s.innerHTML = 'Sparkles';
+                s.style.position = 'fixed';
+                s.style.left = Math.random() * window.innerWidth + 'px';
+                s.style.top = window.innerHeight + 'px';
+                s.style.fontSize = '32px';
+                s.style.pointerEvents = 'none';
+                s.style.animation = 'floatUp 2s ease-out forwards';
+                document.body.appendChild(s);
+                setTimeout(() => s.remove(), 2000);
+            }, i * 80);
+        }
+    }
+
+    function updateAll() {
+        const totalItems = cart.reduce((s,i) => s + i.qty, 0);
+        const totalPrice = cart.reduce((s,i) => s + i.price * i.qty, 0);
+
+        document.getElementById('cartBadge').textContent = totalItems;
+        document.getElementById('floatingCart').classList.toggle('show', totalItems > 0);
+        if (cart.length === 0) {
+            document.getElementById('cartItems').innerHTML = '<p style="text-align:center;color:#cc6699;">Your cart is empty</p>';
+        } else {
+            document.getElementById('cartItems').innerHTML = cart.map(item => `
+                <div style="padding:12px 0;border-bottom:1px dashed #ffd7a8;display:flex;justify-content:space-between;align-items:center;gap:12px;">
+                    <div style="flex:1;min-width:0"><strong style="display:block;">${item.name}</strong>
+                        <small style="color:#666;display:block;margin-top:6px;">Unit: ₹${item.price}</small>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px">
+                        <button class="qty-btn decrease" data-name="${item.name}" style="background:#fff;border:1px solid #ffd7a8;border-radius:8px;padding:6px 10px;">−</button>
+                        <div style="min-width:36px;text-align:center;font-weight:600">${item.qty}</div>
+                        <button class="qty-btn increase" data-name="${item.name}" style="background:#fff;border:1px solid #ffd7a8;border-radius:8px;padding:6px 10px;">+</button>
+                        <div style="color:#cc6699;font-weight:bold;margin-left:10px">₹${item.price * item.qty}</div>
+                        <button class="remove-item" data-name="${item.name}" style="background:#cc0000;color:#fff;border:none;border-radius:8px;padding:6px 10px;margin-left:8px;cursor:pointer;">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Attach handlers for newly rendered controls
+            document.querySelectorAll('#cartItems .increase').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const name = this.dataset.name;
+                    const it = cart.find(i => i.name === name);
+                    if (it) { it.qty += 1; saveCart(); }
+                });
+            });
+            document.querySelectorAll('#cartItems .decrease').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const name = this.dataset.name;
+                    const it = cart.find(i => i.name === name);
+                    if (it) {
+                        if (it.qty > 1) { it.qty -= 1; saveCart(); }
+                        else { // remove when qty goes to 0
+                            cart = cart.filter(x => x.name !== name);
+                            saveCart();
+                        }
+                    }
+                });
+            });
+            document.querySelectorAll('#cartItems .remove-item').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const name = this.dataset.name;
+                    cart = cart.filter(i => i.name !== name);
+                    saveCart();
+                });
+            });
+        }
+
+        document.getElementById('cartTotal').textContent = '₹' + totalPrice;
+    }
+
+    document.getElementById('billBtn').onclick = () => {
+        if (cart.length === 0) return alert('Your cart is empty!');
+        let html = '', grand = 0;
+        cart.forEach(item => {
+            const total = item.price * item.qty;
+            grand += total;
+            html += `<tr>
+                <td style="text-align:left;padding-left:20px;">${item.name}</td>
+                <td>${item.qty}</td>
+                <td>₹${item.price}</td>
+                <td style="color:#cc6699;font-weight:bold;">₹${total}</td>
+            </tr>`;
+        });
+        document.getElementById('billItems').innerHTML = html;
+        document.getElementById('grandTotal').textContent = '₹' + grand;
+        document.getElementById('billModal').style.display = 'flex';
+    };
+
+    window.closeBill = () => document.getElementById('billModal').style.display = 'none';
+
+    document.getElementById('cartIcon').onclick = () => document.getElementById('floatingCart').classList.toggle('show');
+
+    document.querySelectorAll('.add-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            addToCart(this, this.dataset.name, this.dataset.price);
+        });
+    });
+
+    updateAll();
+</script>
+</body>
+</html>
